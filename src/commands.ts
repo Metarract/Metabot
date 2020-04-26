@@ -1,11 +1,8 @@
-import { Client } from "discord.js";
-
 interface CommandDetails {
   [key: string]: {
     [key: string]: string;
-  }
+  };
 }
-
 
 enum BotCommands {
   ABOUT = "about",
@@ -72,8 +69,8 @@ export const handleHelp = (): string => {
   return res
 }
 
-export const handleDiceRoll = (params: string[]) => {
-  let res = "Rolling:\r\n\`\`\`diff\r\n"
+export const handleDiceRoll = (params: string[]): string => {
+  let res = "Rolling:\r\n```diff\r\n"
   const sums: number[] = []
   if (params.length === 0) {
     res += '- Raw: 1d20\r\n'
@@ -82,12 +79,13 @@ export const handleDiceRoll = (params: string[]) => {
     const stringParts = params.join('').split('+');
     console.log(stringParts)
     const dice = stringParts.map(elem => {
-      const diceMatch = elem.match(/(\dd\d+)\b/i)
+      const diceMatch = elem.match(/(\d+d\d+)\b/i)
       if (diceMatch) return diceMatch[0]
     }).filter(die => !!die)
     const diceString = dice.join(' + ')
     const numbers = stringParts.map(elem => +elem).filter(elem => !isNaN(elem))
     const numberString = numbers.join(' + ')
+    /* eslint-disable-next-line */
     dice.forEach(die => sums.push(rollDie(die!)))
     numbers.forEach(number => sums.push(number))
     res += `- Raw: ${diceString}`
@@ -96,6 +94,6 @@ export const handleDiceRoll = (params: string[]) => {
   }
   res += `- Results: ${sums.join(' + ')}\r\n`
   res += `+ Final: ${sums.reduce((a, b) => a + b)}\r\n`
-  res += `\`\`\``
+  res += '```'
   return res
 }

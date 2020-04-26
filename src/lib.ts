@@ -1,7 +1,7 @@
 import { Message, Client } from "discord.js";
 import { handleDiceRoll, handleHelp, handleAbout } from "./commands";
 
-const commandHandler = async (commandString: string, client: Client): Promise<void | string> => {
+const commandHandler = async (commandString: string): Promise<void | string> => {
   const [command, ...parameters] = commandString.slice(1).split(` `).filter(param => !!param)
   switch (command.toLowerCase()) {
     case "about":
@@ -19,7 +19,7 @@ const commandHandler = async (commandString: string, client: Client): Promise<vo
 export const replyHandler = async (client: Client, message: Message): Promise<string | void> => {
   const msgContent = message.content.trim()
   if (msgContent.startsWith(`!`)) {
-    const response = await commandHandler(msgContent, client)
+    const response = await commandHandler(msgContent)
     return response
   }
   return
