@@ -10,14 +10,15 @@
   - will roll a number of dice (`#d`) of type (`d#`) and add any flat numbers in addition (`+ #`)
   - e.g.:
       - `2d3+5d8+1+3 Result: 33`
-- `!quote`
-  - returns a random quote from the quote database
-  - optionally, you can specify a number to retrieve a specific quote
-    - e.g. `!quote 10`
 
 ## Discord Commands
 
 ## Twitch Commands
+
+- `!quote`
+  - returns a random quote from the quote database
+  - optionally, you can specify a number to retrieve a specific quote
+    - e.g. `!quote 10`
 
 ## Custom Commands
 
