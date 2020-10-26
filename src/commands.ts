@@ -1,5 +1,5 @@
 import { ChatUserstate } from "tmi.js"
-import { fetchQuotes, addQuote, removeQuote, getInfo, updateModpack } from "./dal"
+import { fetchQuotes, addQuote, removeQuote, addCustomCommand, getCustomCommand, updateCustomCommand, deleteCustomCommand } from "./dal"
 
 const rollDie = (die: string): number => {
   if (!die) return 0
@@ -52,18 +52,16 @@ export const handleDiceRoll = (params: string[]): string => {
   return res
 }
 
-const checkCustomCommandExists = (command: string): boolean => {
-  // TODO
-  console.log(command);
-  return (command === "test")
-}
-
-export const handleCustomCommand = (command: string, parameters: string[], userState: ChatUserstate): void | string => {
+export const handleCustomCommand = async (command: string, parameters: string[], userState: ChatUserstate): Promise<void | string> => {
+  console.log('entering here')
   // may have overcomplicated this because I was excited to use bitwise opers
   // doesn't look awful at a glance but may be a pain from a maintenance perspective
   let customBits = 0;
-  if (checkCustomCommandExists(command)) customBits += 1;
+  let response = ""
+  // if (false) customBits += 1
+  if (await getCustomCommand(command)) customBits += 1
   if (userState.mod || userState["badges-raw"]?.includes('broadcaster/1')) customBits += 2;
+  console.log('got here 1')
   if (parameters) {
     switch (parameters[0]) {
       case "delete":
@@ -78,12 +76,18 @@ export const handleCustomCommand = (command: string, parameters: string[], userS
       default:
         break
     }
+    parameters.splice(0, 1)
+    response = parameters.join(" ")
   }
+  console.log('got here 2')
+  console.log(customBits)
   // test bits descending order to ensure we don't skip more unique options
-  if ((customBits & 18) === 18 && !(customBits & 1)) return "added"
-  if ((customBits & 11) === 11) return "updated"
-  if ((customBits & 7) === 7) return "deleted"
-  if ((customBits & 1) === 1) return "command exists"
+  if ((customBits & 18) === 18 && !(customBits & 1)) return addCustomCommand(command, response);
+  console.log('got here 3')
+  if ((customBits & 11) === 11) return updateCustomCommand(command, response)
+  if ((customBits & 7) === 7) return deleteCustomCommand(command)
+  if ((customBits & 1) === 1) return getCustomCommand(command)
+  console.log('got here 4')
   return
 }
 

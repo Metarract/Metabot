@@ -5,43 +5,76 @@ interface Quote {
   quote: string;
 }
 
-interface Info {
-  modpack: string;
+interface CustomCommand {
+  [key: string]: string; 
 }
 
-export const getInfo = async (): Promise<Info> => {
+export const getCustomCommand = async (command: string): Promise<any | void> => {
+  console.log(command)
   try {
-    const returnedRows: Promise<Info[]> = new Promise((resolve, reject) => {
-      db.all("SELECT * FROM Info", (err, rows) => {
-        if (err) reject(err);
-        resolve(rows);
+    const returnedRow: Promise<CustomCommand> = new Promise((resolve, reject) => {
+      db.get(`SELECT response FROM CustomCommands WHERE command = '${command}'`, function (err, row) {
+        if (err) {
+          reject(err)
+        }
+        resolve(row)
       })
     })
-    console.log(await returnedRows)
-    const infoObject: Info[] = (await returnedRows).map(row => {
-      return {
-        modpack: row.modpack
-      } as Info
-    })
-    return infoObject[0];
+    const row = await returnedRow
+    if (row) {
+      return row.response
+    }
   } catch (error) {
-    throw Error(error)
+    return "Something went wrong, please try again"
   }
 }
 
-export const updateModpack = async (modpackInfo: string): Promise<string> => {
+export const deleteCustomCommand = async (command: string): Promise<string | void> => {
   try {
-    const returnedRows = new Promise<RunResult>((resolve, reject) => {
-      db.run(`UPDATE Info SET modpack = "${modpackInfo}" WHERE id = 1`, function (this, err) {
+    const returnedRows: Promise<RunResult> = new Promise((resolve, reject) => {
+      db.run(`DELETE FROM CustomCommands WHERE command = '${command}'`, function (this, err) {
         if (err) reject(err)
         resolve(this)
       })
     })
     await returnedRows
-    return 'Info Updated'
+    return 'Command removed'
   } catch (error) {
     console.log(error)
-    return 'Something went wrong, please try again'
+    return
+  }
+}
+
+export const addCustomCommand = async (command: string, response: string): Promise<string> => {
+  console.log(command)
+  console.log(response)
+  try {
+    const returnedRows: Promise<RunResult> = new Promise((resolve, reject) => {
+      db.run(`INSERT INTO CustomCommands(command, response) VALUES('${command}','${response}')`, function (this, err) {
+        if (err) reject(err)
+        resolve(this)
+      })
+    })
+    await returnedRows
+    return `Command ${command} added`
+  } catch (error) {
+    return "Something went wrong, please try again"
+  }
+}
+
+export const updateCustomCommand = async (command: string, response: string): Promise<string | void> => {
+  try {
+    const returnedRows: Promise<RunResult> = new Promise((resolve, reject) => {
+      db.run(`UPDATE CustomCommands SET response = '${response}' WHERE command = '${command}'`, function (this, err) {
+        if (err) reject(err)
+        resolve(this)
+      })
+    })
+    await returnedRows
+    return 'Command updated'
+  } catch (error) {
+    console.log(error)
+    return
   }
 }
 

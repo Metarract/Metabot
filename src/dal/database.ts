@@ -8,7 +8,7 @@ const init = async (): Promise<void> => {
     await runPromise(db, "CREATE TABLE IF NOT EXISTS Quotes (id INTEGER PRIMARY KEY AUTOINCREMENT, quote TEXT)")
     await runPromise(db,
       'CREATE TABLE IF NOT EXISTS CustomCommands (\
-        id INTEGER PRIMARY KEY,\
+        id INTEGER PRIMARY KEY AUTOINCREMENT,\
         command TEXT NOT NULL,\
         response TEXT DEFAULT NULL)'
     )

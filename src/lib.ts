@@ -20,7 +20,6 @@ const discordCommandHandler = async (commandString: string): Promise<void | stri
     default:
       return
   }
-  return
 }
 
 const twitchCommandHandler = async (commandString: string, userState: ChatUserstate): Promise<void | string> => {
@@ -36,12 +35,9 @@ const twitchCommandHandler = async (commandString: string, userState: ChatUserst
       return handleDiceRoll(parameters)
     case "quote":
       return await handleQuote(parameters, userState);
-    case "pp":
-      return "it small u_u"
     default:
       return handleCustomCommand(command, parameters, userState)
   }
-  return
 }
 
 export const discordReplyHandler = async (client: Client, message: Message): Promise<string | void> => {
