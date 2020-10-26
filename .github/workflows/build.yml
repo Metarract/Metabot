@@ -20,6 +20,7 @@ jobs:
     - run: npm ci
     - run: npm run lint
     # - run: npm test
+    - run: npm run build
   buildProd:
     if: github.event_name != 'pull_request'
     needs: build
@@ -34,3 +35,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm i --production
+    - run: npm run build
