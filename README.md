@@ -17,20 +17,20 @@ The ```.devcontainer``` is used with the [Remote Development Extension](https://
 This repository utilizes ```dotenv``` locally and as such requires a ```.env``` file with the following variables:
 
 ```none
-BOT_TOKEN=insertTokenStringHere
+DISCORD_BOT_TOKEN=<token string>
+TWITCH_BOT_SECRET=<client secret>
+TWITCH_BOT_CLIENT_ID=<client id>
+TWITCH_BOT_USERNAME=<bot username>
+TWITCH_BOT_TOKEN=<oauth:token>
+TWITCH_BOT_CHANNELS=<comma,separated,channel,list>
 ```
 
-This token can be found in the [Discord developer portal](https://discordapp.com/developers/applications) in the bot you've created under your application. Alternatively, setting it as an environment variable will also work.
+Naturally, any of these secrets can be listed as environment variables on your executing node as well.
+
+The Discord token can be found in the [Discord Developer Portal](https://discordapp.com/developers/applications) in the bot you've created under your application.
+
+Twitch secret + client id can be found under the [Twitch Developer Console](https://dev.twitch.tv/console) under the bot you've created. Your oauth token must be generated under the bot account you will be logging in as, [here](https://twitchapps.com/tmi/).
 
 ### Adding new commands
 
-Commands are listed under the ```commands.ts```. Each command should have a value in the enum and a corresponding entry in the ```commandDescriptions``` variable. Entries are formatted thus:
-
-```javascript
-commandName: {
-  '': '# Description for running the command with no parameters'
-  'other parameters': '# Description of command with provided parameters'
-}
-```
-
-\# provides some nice color formatting for clarity.
+Commands are called under ```lib.ts``` and defined in ```commands.ts```. Each command should have a corresponding entry in the ```COMMANDS.md``` file.
