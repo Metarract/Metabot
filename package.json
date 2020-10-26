@@ -6,8 +6,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "watch": "nodemon .",
-    "build": "tsc src/*.ts",
-    "lint": "eslint src/*.ts",
+    "build": "tsc",
+    "lint": "eslint src/**/*.ts",
     "test": "jest"
   },
   "repository": {

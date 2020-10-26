@@ -9,7 +9,7 @@ interface CustomCommand {
   [key: string]: string; 
 }
 
-export const getCustomCommand = async (command: string): Promise<any | void> => {
+export const getCustomCommand = async (command: string): Promise<string | void> => {
   try {
     const returnedRow: Promise<CustomCommand> = new Promise((resolve, reject) => {
       db.get(`SELECT response FROM CustomCommands WHERE command = '${command}'`, function (err, row) {
