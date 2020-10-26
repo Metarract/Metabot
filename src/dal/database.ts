@@ -7,12 +7,11 @@ const init = async (): Promise<void> => {
   try {
     await runPromise(db, "CREATE TABLE IF NOT EXISTS Quotes (id INTEGER PRIMARY KEY AUTOINCREMENT, quote TEXT)")
     await runPromise(db,
-      'CREATE TABLE IF NOT EXISTS Info (\
-        id INTEGER PRIMARY KEY CHECK (id = 1),\
-        command TEXT DEFAULT NULL,\
+      'CREATE TABLE IF NOT EXISTS CustomCommands (\
+        id INTEGER PRIMARY KEY,\
+        command TEXT NOT NULL,\
         response TEXT DEFAULT NULL)'
     )
-    await runPromise(db, 'INSERT INTO Info DEFAULT VALUES')
   } catch (error) {
     if (error.code !== 'SQLITE_CONSTRAINT') console.log(error.message)
   }

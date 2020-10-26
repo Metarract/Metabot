@@ -1,6 +1,6 @@
 import { Message, Client } from "discord.js";
 import { ChatUserstate } from "tmi.js";
-import { handleDiceRoll, handleHelp, handleAbout, handleModPack, handleQuote } from "./commands";
+import { handleDiceRoll, handleHelp, handleAbout, handleQuote, handleCustomCommand } from "./commands";
 
 const splitMessage = (message: string): [string, string[]] => {
   const [command, ...parameters] = message.slice(1).split(` `).filter(param => param !== null || param !== undefined);
@@ -24,8 +24,9 @@ const discordCommandHandler = async (commandString: string): Promise<void | stri
 }
 
 const twitchCommandHandler = async (commandString: string, userState: ChatUserstate): Promise<void | string> => {
-  const [command, parameters] = splitMessage(commandString)
-  switch (command.toLowerCase()) {
+  const [commandBase, parameters] = splitMessage(commandString)
+  const command = commandBase.toLowerCase()
+  switch (command) {
     case "about":
       return handleAbout()
     case "commands":
@@ -33,17 +34,12 @@ const twitchCommandHandler = async (commandString: string, userState: ChatUserst
       return handleHelp()
     case "roll":
       return handleDiceRoll(parameters)
-    case "modpack":
-    case "modpacks":
-    case "mods":
-    case "mod":
-      return await handleModPack(parameters, userState);
     case "quote":
       return await handleQuote(parameters, userState);
     case "pp":
       return "it small u_u"
     default:
-      return
+      return handleCustomCommand(command, parameters, userState)
   }
   return
 }

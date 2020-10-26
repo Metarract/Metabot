@@ -52,14 +52,39 @@ export const handleDiceRoll = (params: string[]): string => {
   return res
 }
 
-export const handleModPack = async (params: string[], userState: ChatUserstate): Promise<string> => {
-  if (params.length && (userState.mod || userState["badges-raw"]?.includes('broadcaster/1'))) {
-    if (params[0] === 'set') {
-      const modPackString = params.filter((param, index) => index !== 0).join(' ')
-      return updateModpack(modPackString);
+const checkCustomCommandExists = (command: string): boolean => {
+  // TODO
+  console.log(command);
+  return (command === "test")
+}
+
+export const handleCustomCommand = (command: string, parameters: string[], userState: ChatUserstate): void | string => {
+  // may have overcomplicated this because I was excited to use bitwise opers
+  // doesn't look awful at a glance but may be a pain from a maintenance perspective
+  let customBits = 0;
+  if (checkCustomCommandExists(command)) customBits += 1;
+  if (userState.mod || userState["badges-raw"]?.includes('broadcaster/1')) customBits += 2;
+  if (parameters) {
+    switch (parameters[0]) {
+      case "delete":
+        customBits += 4
+        break
+      case "update":
+        customBits += 8
+        break
+      case "add":
+        customBits += 16
+        break
+      default:
+        break
     }
   }
-  return (await getInfo()).modpack
+  // test bits descending order to ensure we don't skip more unique options
+  if ((customBits & 18) === 18 && !(customBits & 1)) return "added"
+  if ((customBits & 11) === 11) return "updated"
+  if ((customBits & 7) === 7) return "deleted"
+  if ((customBits & 1) === 1) return "command exists"
+  return
 }
 
 const getRandomQuote = (quotes: string[]): [string, number] => {
