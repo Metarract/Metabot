@@ -5,8 +5,7 @@
 - `!about`
   - Gives a brief description of the bot
 - `!help`
-  - On Discord, will output a list of commands + a link to this page
-  - On Twitch, will link this page
+  - Links this page
 - `!roll #d# + # (et al)`
   - will roll a number of dice (`#d`) of type (`d#`) and add any flat numbers in addition (`+ #`)
   - e.g.:
@@ -16,12 +15,25 @@
   - optionally, you can specify a number to retrieve a specific quote
     - e.g. `!quote 10`
 
-
 ## Discord Commands
 
 ## Twitch Commands
 
-- `!modpack` (also `modpacks, mods, mod`)
-  - If we're playing something with mods, info should be located here. Hopefully.
-  - mods can `set` the modpack
-    - e.g.: `!modpack set This is where you would put the updated info`
+## Custom Commands
+
+- Custom commands will be shared between Discord and Twitch
+- Cannot overwrite built-in commands
+- They are formatted with a simple ```command -> response```
+- Adding:
+  - ```!<command> add <response>```
+- Updating:
+  - ```!<command> update <response>```
+- Deleting:
+  - ```!<command> delete```
+- Calling:
+  - ```!<command>```
+- e.g.:
+  - ```!hello add konnichiwa```
+  - ```!hello update olleh!```
+  - ```!hello delete```
+

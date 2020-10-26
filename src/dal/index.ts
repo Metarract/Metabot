@@ -10,7 +10,6 @@ interface CustomCommand {
 }
 
 export const getCustomCommand = async (command: string): Promise<any | void> => {
-  console.log(command)
   try {
     const returnedRow: Promise<CustomCommand> = new Promise((resolve, reject) => {
       db.get(`SELECT response FROM CustomCommands WHERE command = '${command}'`, function (err, row) {
@@ -41,13 +40,11 @@ export const deleteCustomCommand = async (command: string): Promise<string | voi
     return 'Command removed'
   } catch (error) {
     console.log(error)
-    return
+    return 'Something went wrong, please try again'
   }
 }
 
 export const addCustomCommand = async (command: string, response: string): Promise<string> => {
-  console.log(command)
-  console.log(response)
   try {
     const returnedRows: Promise<RunResult> = new Promise((resolve, reject) => {
       db.run(`INSERT INTO CustomCommands(command, response) VALUES('${command}','${response}')`, function (this, err) {

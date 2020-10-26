@@ -20,7 +20,7 @@ export const handleAbout = (): string => {
 
 export const handleHelp = (): string => {
   return `\r\n
-    A list of commands can be found here: \r\n I HAVEN'T PUSHED THIS YET SO GOOD LUCK LOLOLOL`
+    A list of commands can be found here: \r\n https://github.com/Metarract/Metabot/blob/master/COMMANDS.md`
 }
 
 const getDiceStrings = (elem: string): string | undefined => {
@@ -53,7 +53,6 @@ export const handleDiceRoll = (params: string[]): string => {
 }
 
 export const handleCustomCommand = async (command: string, parameters: string[], userState: ChatUserstate): Promise<void | string> => {
-  console.log('entering here')
   // may have overcomplicated this because I was excited to use bitwise opers
   // doesn't look awful at a glance but may be a pain from a maintenance perspective
   let customBits = 0;
@@ -61,7 +60,6 @@ export const handleCustomCommand = async (command: string, parameters: string[],
   // if (false) customBits += 1
   if (await getCustomCommand(command)) customBits += 1
   if (userState.mod || userState["badges-raw"]?.includes('broadcaster/1')) customBits += 2;
-  console.log('got here 1')
   if (parameters) {
     switch (parameters[0]) {
       case "delete":
@@ -79,15 +77,11 @@ export const handleCustomCommand = async (command: string, parameters: string[],
     parameters.splice(0, 1)
     response = parameters.join(" ")
   }
-  console.log('got here 2')
-  console.log(customBits)
   // test bits descending order to ensure we don't skip more unique options
   if ((customBits & 18) === 18 && !(customBits & 1)) return addCustomCommand(command, response);
-  console.log('got here 3')
   if ((customBits & 11) === 11) return updateCustomCommand(command, response)
   if ((customBits & 7) === 7) return deleteCustomCommand(command)
   if ((customBits & 1) === 1) return getCustomCommand(command)
-  console.log('got here 4')
   return
 }
 
